@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="sedo_width_toggle" title="Website Width Toggle" version_string="1.0" version_id="0" url="" install_callback_class="Sedo_WebsiteWidth_Installer" install_callback_method="install" uninstall_callback_class="Sedo_WebsiteWidth_Installer" uninstall_callback_method="uninstall">
+<addon addon_id="sedo_width_toggle" title="Website Width Toggle" version_string="1.1" version_id="1" url="" install_callback_class="Sedo_WebsiteWidth_Installer" install_callback_method="install" uninstall_callback_class="Sedo_WebsiteWidth_Installer" uninstall_callback_method="uninstall">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -12,14 +12,16 @@
 	<xen:html><xen:include template="style_property_unit_extra"><xen:set var="$reset">{xen:phrase reset}</xen:set></xen:include></xen:html>
 </xen:selectunit>]]></template>
   </admin_templates>
+  <admin_template_modifications/>
   <code_events/>
   <code_event_listeners>
-    <listener event_id="load_class_controller" execute_order="10" callback_class="Sedo_WebsiteWidth_Listener_ControllerPublic" callback_method="extendController" active="1" description="Extend Controller"/>
-    <listener event_id="load_class_datawriter" execute_order="10" callback_class="Sedo_WebsiteWidth_Listener_Datawriter" callback_method="extendDw" active="1" description="Extend Datawriter"/>
-    <listener event_id="template_hook" execute_order="10" callback_class="Sedo_WebsiteWidth_Listener_Templates" callback_method="hooks" active="1" description="Hook Listeners"/>
+    <listener event_id="load_class_controller" execute_order="10" callback_class="Sedo_WebsiteWidth_Listener_ControllerPublic" callback_method="extendController" active="1" hint="" description="Extend Controller"/>
+    <listener event_id="load_class_datawriter" execute_order="10" callback_class="Sedo_WebsiteWidth_Listener_Datawriter" callback_method="extendDw" active="1" hint="" description="Extend Datawriter"/>
+    <listener event_id="template_hook" execute_order="10" callback_class="Sedo_WebsiteWidth_Listener_Templates" callback_method="hooks" active="1" hint="" description="Hook Listeners"/>
   </code_event_listeners>
   <cron/>
   <email_templates/>
+  <email_template_modifications/>
   <optiongroups/>
   <permissions>
     <permission_groups/>
@@ -140,7 +142,20 @@
 	</li>
 </xen:if>]]></template>
   </templates>
-  <bb_code_media_sites/>
+  <public_template_modifications>
+    <modification template="footer" modification_key="sedo_width_toggle_footer" description="Website Width Toggle" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#([ \t]+?)<xen:if\s+?is="{\$canChangeLanguage}">#i]]></find>
+      <replace><![CDATA[$1<xen:if is="{xen:property sedo_websitewidth_toggle_activation}">
+$1	<xen:include template="sedo_website_width_toggle" />
+$1</xen:if>
+$0]]></replace>
+    </modification>
+    <modification template="account_preferences" modification_key="sedo_width_toggle_pref" description="Website Width Preference" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#([ \t]*)<li>.+?{xen:checked \$visitor.visible}(?s).+?</li>#i]]></find>
+      <replace><![CDATA[$0
+$1<xen:include template="sedo_website_width_user_option"></xen:include>]]></replace>
+    </modification>
+  </public_template_modifications>
   <template_modifications>
     <modification title="Website Width Preference" template_title="account_preferences" execute_order="10" modification_type="preg_replace" callback_class="" callback_method="" description="User field" version_id="0" version_string="1.0" active="1">
       <search_value><![CDATA[#([ \t]*)<li>.+?{xen:checked \$visitor.visible}(?s).+?</li>#i]]></search_value>
@@ -155,4 +170,5 @@ $1</xen:if>
 $0]]></replace_value>
     </modification>
   </template_modifications>
+  <bb_code_media_sites/>
 </addon>
