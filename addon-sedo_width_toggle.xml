@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="sedo_width_toggle" title="Website Width Toggle" version_string="1.1" version_id="1" url="" install_callback_class="Sedo_WebsiteWidth_Installer" install_callback_method="install" uninstall_callback_class="Sedo_WebsiteWidth_Installer" uninstall_callback_method="uninstall">
+<addon addon_id="sedo_width_toggle" title="Website Width Toggle" version_string="1.2" version_id="2" url="" install_callback_class="Sedo_WebsiteWidth_Installer" install_callback_method="install" uninstall_callback_class="Sedo_WebsiteWidth_Installer" uninstall_callback_method="uninstall">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -46,6 +46,8 @@
     <phrase title="style_property_sedo_websitewidth_fixed_master" version_id="0" version_string="1.0"><![CDATA[Fixed Width]]></phrase>
     <phrase title="style_property_sedo_websitewidth_fluid_description_master" version_id="0" version_string="1.0"><![CDATA[]]></phrase>
     <phrase title="style_property_sedo_websitewidth_fluid_master" version_id="0" version_string="1.0"><![CDATA[Fluid Width]]></phrase>
+    <phrase title="style_property_sedo_websitewidth_mobile_description_master" version_id="1" version_string="1.1"><![CDATA[Extra addon required: "Browser detection". This option will bypass the user preference.]]></phrase>
+    <phrase title="style_property_sedo_websitewidth_mobile_master" version_id="1" version_string="1.1"><![CDATA[State on mobile]]></phrase>
     <phrase title="style_property_sedo_websitewidth_toggle_activation_description_master" version_id="0" version_string="1.0"><![CDATA[]]></phrase>
     <phrase title="style_property_sedo_websitewidth_toggle_activation_master" version_id="0" version_string="1.0"><![CDATA[Activate width toggle button?]]></phrase>
     <phrase title="style_property_sedo_websitewidth_toggle_fixed_description_master" version_id="0" version_string="1.0"><![CDATA[]]></phrase>
@@ -67,18 +69,24 @@
     <property property_name="sedo_websitewidth_toggle_fixed_hover" property_type="css" definition="1" group_name="sedo_website_width_toggle" title="Toggle Trigger fixed - hover" description="" css_components="text,background,border,layout,extra" scalar_type="" scalar_parameters="" display_order="40" sub_group=""><![CDATA[{"background-color":"rgb(195, 127, 191)","color":"rgb(255, 255, 255)","text-decoration":{"none":"none"}}]]></property>
     <property property_name="sedo_websitewidth_toggle_fluid" property_type="css" definition="1" group_name="sedo_website_width_toggle" title="Toggle Trigger fluid" description="" css_components="text,background,border,layout,extra" scalar_type="" scalar_parameters="" display_order="50" sub_group=""><![CDATA[{"background-color":"rgb(241, 214, 11)","border-radius":"5px","color":"rgb(255, 255, 255)","extra":"display:block;\ntext-align:center;\nline-height:14px;\nposition:relative;\ntop:3px;","font-size":"20px","padding-all":"2px","text-decoration":{"none":"none"},"width":"22px"}]]></property>
     <property property_name="sedo_websitewidth_toggle_fluid_hover" property_type="css" definition="1" group_name="sedo_website_width_toggle" title="Toggle Trigger fluid - hover" description="" css_components="text,background,border,layout,extra" scalar_type="" scalar_parameters="" display_order="60" sub_group=""><![CDATA[{"background-color":"rgb(242, 224, 92)","color":"rgb(255, 255, 255)","text-decoration":{"none":"none"}}]]></property>
+    <property property_name="sedo_websitewidth_mobile" property_type="scalar" definition="1" group_name="sedo_website_width_toggle" title="State on mobile" description="Extra addon required: &quot;Browser detection&quot;. This option will bypass the user preference." css_components="" scalar_type="template" scalar_parameters="style_property_unit_sedo_website_width" display_order="40" sub_group=""><![CDATA[fluid]]></property>
     <group group_name="sedo_website_width_toggle" display_order="9999">
       <title>Website Width Toggle</title>
       <description>Options for the addon "Website Width Toggle"</description>
     </group>
   </style_properties>
   <templates>
-    <template title="sedo_website_width_toggle" version_id="0" version_string="1.0"><![CDATA[<xen:require js="js/sedo/widthtoggle/widthtoggle.js" />
+    <template title="sedo_website_width_toggle" version_id="1" version_string="1.1"><![CDATA[<xen:require js="js/sedo/widthtoggle/widthtoggle.js" />
 <xen:require css="sedo_website_width_toggle.css" />
 <xen:edithint template="sedo_website_width_user_option" />
 
 <xen:if is="{$visitor.user_id}">
 	<xen:set var="$state"><xen:if is="{xen:property sedo_websitewidth_default} == 'fixed'">{xen:if '{$visitor.sedo_website_width}', 'fluid', 'fixed'}<xen:else />{xen:if '{$visitor.sedo_website_width}', 'fixed', 'fluid'}</xen:if></xen:set>
+
+	<xen:if is="{$visitor.getBrowser.isMobile}">
+		<xen:set var="$state">{xen:property sedo_websitewidth_mobile}</xen:set>
+	</xen:if>
+	
 	<xen:if is="{$state} == 'fixed'">
 		<xen:require css="sedo_website_width_toggle_members_fixed.css" />
 	<xen:else />
@@ -156,6 +164,7 @@ $0]]></replace>
 $1<xen:include template="sedo_website_width_user_option"></xen:include>]]></replace>
     </modification>
   </public_template_modifications>
+  <bb_code_media_sites/>
   <template_modifications>
     <modification title="Website Width Preference" template_title="account_preferences" execute_order="10" modification_type="preg_replace" callback_class="" callback_method="" description="User field" version_id="0" version_string="1.0" active="1">
       <search_value><![CDATA[#([ \t]*)<li>.+?{xen:checked \$visitor.visible}(?s).+?</li>#i]]></search_value>
@@ -170,5 +179,4 @@ $1</xen:if>
 $0]]></replace_value>
     </modification>
   </template_modifications>
-  <bb_code_media_sites/>
 </addon>
