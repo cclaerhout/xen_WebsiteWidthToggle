@@ -16,5 +16,4 @@ class Sedo_WebsiteWidth_Installer
 		XenForo_Application::get('db')->query("ALTER TABLE xf_user_option DROP sedo_website_width");	
 	}
 }
-?>
 

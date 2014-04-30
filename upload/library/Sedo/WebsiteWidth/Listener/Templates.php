@@ -3,7 +3,8 @@ class Sedo_WebsiteWidth_Listener_Templates
 {
 	public static function hooks($hookName, &$contents, array $hookParams, XenForo_Template_Abstract $template)
 	{
-		switch ($hookName) {
+		switch ($hookName) 
+		{
 			case 'body':
 				$isMember = XenForo_Visitor::getUserId();
 				if(!$isMember)
@@ -21,8 +22,7 @@ class Sedo_WebsiteWidth_Listener_Templates
 				$replace = '$1 pageWidthDefault$2$3';
 			
 				$contents = preg_replace($search, $replace, $contents);
-				break;
+			break;
 		}
-
 	}
 }
